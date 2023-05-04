@@ -11,12 +11,13 @@ const Hero = () => {
         </button>
       </nav>
       <h1 className="head_text">
-        Summarize articles with <br className=" max-md:hidden" />
-        <span className="orange_gradient">OpenAI GPT-4</span>
+        Effortless Article Summaries <br className=" max-md:hidden" />
+        <span className="orange_gradient"> with SynthSpeak</span>
       </h1>
       <h2 className="desc">
-        Simplify your reading with SynthSpeak, an open source article summarizer
-        that transforms lengthy articlees into clear and concise summaries
+        Get article summaries with SynthSpeak, anarticle summarization tool that utilizes OpenAI GPT-4 to condense
+        extensive articles into brief and comprehensible summaries, making
+        reading a breeze.
       </h2>
     </header>
   );
