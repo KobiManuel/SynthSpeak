@@ -1,11 +1,11 @@
 import React from "react";
-import logo from "../assets/logo.svg";
+import logo from "../assets/logo.png";
 
 const Hero = () => {
   return (
     <header className="w-full flex justify-center items-center flex-col">
       <nav className=" w-full !flex flex-row justify-between items-center mb-10 pt-3">
-        <img src={logo} alt="logo" className="w-28 object-contain" />
+        <img src={logo} alt="logo" className=" w-40 object-cover" />
         <button className="black_btn" type="button">
           Twitter
         </button>
