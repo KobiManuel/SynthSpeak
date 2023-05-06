@@ -1,16 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import logo from "../assets/logo.png";
+import Demo from "./Demo";
 
 const Hero = () => {
 
-function Tab({ title, active, onClick }) {
+function Tab({ title, active, onClick, className }) {
   const activeClasses = active
     ? "bg-gray-100 text-gray-900"
     : "text-gray-500 hover:text-gray-700";
   return (
     <li
       onClick={onClick}
-      className={`cursor-pointer px-3 py-2 rounded-md text-sm font-medium ${activeClasses}`}
+      className={`cursor-pointer px-3 py-2 rounded-md text-sm font-medium ${activeClasses} ${className}`}
     >
       {title}
     </li>
@@ -20,9 +21,19 @@ function Tab({ title, active, onClick }) {
 function Slider({ activeTab, numTabs, onClick }) {
   const [sliderPos, setSliderPos] = useState(0);
   const [sliderWidth, setSliderWidth] = useState(0);
+  const titles = ["Summarize", "Paraphrase", "both"];
 
-  const handleClick = (index) => {
-    setSliderPos(index * sliderWidth);
+   useEffect(() => {
+     const firstChild = document.querySelector(".tab-item:first-child");
+     setSliderWidth(firstChild.offsetWidth);
+     setSliderPos(firstChild.offsetLeft)
+   }, []);
+
+  const handleClick = (index, el) => {
+    const tabPos = el.offsetLeft;
+     const width = el.clientWidth;
+     setSliderWidth(width)
+    setSliderPos(tabPos);
     onClick(index);
   };
 
@@ -35,16 +46,14 @@ function Slider({ activeTab, numTabs, onClick }) {
           transform: `translateX(${sliderPos}px)`,
         }}
       ></div>
-      <ul
-        className="flex border-b border-gray-200"
-        ref={(el) => setSliderWidth(el?.firstElementChild?.offsetWidth)}
-      >
+      <ul className="flex border-b border-gray-200 mx-auto w-fit">
         {Array.from(Array(numTabs).keys()).map((index) => (
           <Tab
             key={index}
-            title={`Tab ${index + 1}`}
+            title={titles[index]}
             active={index === activeTab}
-            onClick={() => handleClick(index)}
+            onClick={(e) => handleClick(index, e.currentTarget)}
+            className="tab-item"
           />
         ))}
       </ul>
@@ -225,10 +234,7 @@ function Tabs({ children }) {
       <div className="container mx-auto py-8">
         <Tabs>
           <div title="Tab 1">
-            <h1 className="text-2xl font-bold">Tab 1 Content</h1>
-            <p className="mt-4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            </p>
+          <Demo />
           </div>
           <div title="Tab 2">
             <h1 className="text-2xl font-bold">Tab 2 Content</h1>
