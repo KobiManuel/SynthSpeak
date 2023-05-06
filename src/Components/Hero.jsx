@@ -21,7 +21,7 @@ function Tab({ title, active, onClick, className }) {
 function Slider({ activeTab, numTabs, onClick }) {
   const [sliderPos, setSliderPos] = useState(0);
   const [sliderWidth, setSliderWidth] = useState(0);
-  const titles = ["Summarize", "Paraphrase", "both"];
+  const titles = ["Summarize (with link)", "Summarize (text)", "Paraphrase"];
 
    useEffect(() => {
      const firstChild = document.querySelector(".tab-item:first-child");
@@ -40,13 +40,13 @@ function Slider({ activeTab, numTabs, onClick }) {
   return (
     <div className="relative mt-1">
       <div
-        className="absolute bottom-0 left-0 h-1 bg-blue-500 transition-all duration-300"
+        className="absolute bottom-0 left-0 h-1 bg-[#9747ff] transition-all duration-300"
         style={{
           width: `${sliderWidth}px`,
           transform: `translateX(${sliderPos}px)`,
         }}
       ></div>
-      <ul className="flex border-b border-gray-200 mx-auto w-fit">
+      <ul className="flex gap-4 mx-auto w-fit after:absolute after:block after:content-[''] after:w-full after:h-[1px] after:left-0 after:bottom-0 after:bg-gray-200 ">
         {Array.from(Array(numTabs).keys()).map((index) => (
           <Tab
             key={index}
@@ -133,7 +133,7 @@ function Tabs({ children }) {
   const tabs = React.Children.toArray(children);
 
   return (
-    <div className="border border-gray-200 rounded-md">
+    <div className="border border-gray-200 rounded-md h-72">
       <Slider
         activeTab={activeTab}
         numTabs={tabs.length}
