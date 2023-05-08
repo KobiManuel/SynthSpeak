@@ -11,7 +11,7 @@ function Tab({ title, active, onClick, className }) {
   return (
     <li
       onClick={onClick}
-      className={`cursor-pointer px-3 py-2 rounded-md text-sm font-medium ${activeClasses} ${className}`}
+      className={`cursor-pointer px-3 py-2 rounded-md text-sm font-semibold ${activeClasses} ${className}`}
     >
       {title}
     </li>
@@ -40,13 +40,13 @@ function Slider({ activeTab, numTabs, onClick }) {
   return (
     <div className="relative mt-1">
       <div
-        className="absolute bottom-0 left-0 h-1 bg-[#9747ff] transition-all duration-300"
+        className="absolute bottom-0 left-0 h-1 bg-[#9747ff] transition-all duration-700"
         style={{
           width: `${sliderWidth}px`,
           transform: `translateX(${sliderPos}px)`,
         }}
       ></div>
-      <ul className="flex gap-4 mx-auto w-fit after:absolute after:block after:content-[''] after:w-full after:h-[1px] after:left-0 after:bottom-0 after:bg-gray-200 ">
+      <ul className="flex gap-4 mx-auto w-fit after:absolute after:block after:content-[''] after:w-full after:h-[1px] after:left-0 after:bottom-0 after:bg-gray-300 ">
         {Array.from(Array(numTabs).keys()).map((index) => (
           <Tab
             key={index}
@@ -133,7 +133,7 @@ function Tabs({ children }) {
   const tabs = React.Children.toArray(children);
 
   return (
-    <div className="border border-gray-200 rounded-md h-72">
+    <div className="border border-gray-300 rounded-md">
       <Slider
         activeTab={activeTab}
         numTabs={tabs.length}
@@ -226,7 +226,7 @@ function Tabs({ children }) {
           <span className="orange_gradient"> with SynthSpeak</span>
         </h1>
         <h2 className="desc">
-          Get article summaries with SynthSpeak, anarticle summarization tool
+          Get article summaries with SynthSpeak, an article summarization tool
           that utilizes OpenAI GPT-4 to condense extensive articles into brief
           and comprehensible summaries, making reading a breeze.
         </h2>
@@ -234,17 +234,17 @@ function Tabs({ children }) {
       <div className="container mx-auto py-8">
         <Tabs>
           <div title="Tab 1">
-          <Demo />
+            <Demo />
           </div>
           <div title="Tab 2">
             <h1 className="text-2xl font-bold">Tab 2 Content</h1>
-            <p className="mt-4">
+            <p className="mt-4 h-72">
               Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
             </p>
           </div>
           <div title="Tab 3">
             <h1 className="text-2xl font-bold">Tab 3 Content</h1>
-            <p className="mt-4">
+            <p className="mt-4 h-72">
               Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
               nisi ut aliquip ex ea commodo consequat.
             </p>

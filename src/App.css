@@ -1,3 +1,7 @@
+
+@import url('https://fonts.cdnfonts.com/css/liberation-serif');
+
+                
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,6 +9,9 @@
 /* 
   Note: The styles for this gradient grid background is heavily inspired by the creator of this amazing site (https://dub.sh) – all credits go to them! 
 */
+* {
+  font-family: "Liberation Serif", sans-serif;
+}
 
 .main {
   width: 100vw;
@@ -17,7 +24,12 @@
 }
 
 .main:before {
-  background: white;
+  background-color: white;
+  background-image: url(../src/assets/bg_.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* background-size: 280px; */
   position: absolute;
   content: "";
   z-index: 2;
@@ -93,7 +105,7 @@
 }
 
 .url_input {
-  @apply block w-full rounded-md border border-gray-200 bg-white py-2.5 pl-10 pr-12 text-sm shadow-lg font-satoshi font-medium focus:border-black focus:outline-none focus:ring-0;
+  @apply block w-full rounded-md border border-gray-200 bg-white py-2.5 pl-10 pr-12 text-sm shadow-lg font-poppins font-medium focus:border-[#9747ff] focus:outline-none focus:ring-0;
 }
 
 .submit_btn {
