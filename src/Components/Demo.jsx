@@ -10,6 +10,7 @@ const Demo = () => {
     summary: "",
   });
  const [copied, setCopied] = useState("")
+ const [copiedArticle, setCopiedArticle] = useState(false);
   const [allArticles, setAllArticles] = useState([]);
 
   const [getSummary, { error, isFetching }] = useLazyGetSummaryQuery();
@@ -41,14 +42,26 @@ const Demo = () => {
   const handleCopy = (copyUrl) => {
      setCopied(copyUrl);
      navigator.clipboard.writeText(copyUrl);
-
      setTimeout(() => {
       setCopied(false)
      }, 3000);
   }
 
+const handleCopyArticle = (event) => {
+    const button = event.currentTarget;
+    const div = button.parentNode;
+    const copiedSpan = `<span class="copy_float">Copied!</span>`;
+    const text = div.querySelector(".main_article").textContent;
+    navigator.clipboard.writeText(text);
+     setCopiedArticle(true)
+
+      setTimeout(() => {
+        setCopiedArticle(false);
+      }, 3000);
+}
+
   return (
-    <section className="mt-16 w-full max-w-xl mx-auto">
+    <section className="mt-3 w-full max-w-xl mx-auto">
       <div className="flex flex-col w-full gap-2">
         <form
           className="relative flex justify-center items-center"
@@ -74,7 +87,7 @@ const Demo = () => {
           />
           <button
             type="submit"
-            className="submit_btn peer-focus:border-[#9747ff] peer-focus:text-gray-700"
+            className="submit_btn peer-focus:border-[#9747ff] peer-focus:text-black hover:border-[#9747ff]"
           >
             ➚
           </button>
@@ -123,7 +136,20 @@ const Demo = () => {
                 Article <span className="blue_gradient"> Summary</span>
               </h2>
               <div className="summary_box">
-                <p className="font-poppins font-medium text-sm text-gray-700 leading-8">
+                <div
+                  className="copy_btn absolute right-1 top-1"
+                  onClick={() => {
+                    handleCopyArticle(event);
+                  }}
+                >
+                  {copiedArticle && <span class="copy_float">Copied!</span>}
+                  <img
+                    src={copiedArticle ? tick : copy}
+                    alt="/"
+                    className="w-[40%] h-[40%] object-contain"
+                  />
+                </div>
+                <p className="main_article font-poppins font-medium text-[16px] text-gray-700 leading-8 py-4">
                   {article.summary}
                 </p>
               </div>
