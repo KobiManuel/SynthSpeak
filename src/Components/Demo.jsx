@@ -142,7 +142,7 @@ const handleCopyArticle = (event) => {
                     handleCopyArticle(event);
                   }}
                 >
-                  {copiedArticle && <span class="copy_float">Copied!</span>}
+                  {copiedArticle && <span className="copy_float">Copied!</span>}
                   <img
                     src={copiedArticle ? tick : copy}
                     alt="/"

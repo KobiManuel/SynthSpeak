@@ -99,6 +99,9 @@
     border-color: transparent transparent black transparent;
     transform: rotate(220deg) !important;
   }
+  textarea {
+    resize: none;
+  }
 
 @media screen and (max-width: 640px) {
   .main {
