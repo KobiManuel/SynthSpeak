@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import logo from "../assets/logo.png";
 import Demo from "./Demo";
 import ArticleText from "./ArticleText";
+import Paraphraser from "./Paraphraser";
 
 const Hero = () => {
 
@@ -241,11 +242,7 @@ function Tabs({ children }) {
            <ArticleText />
           </div>
           <div title="Tab 3">
-            <h1 className="text-2xl font-bold">Tab 3 Content</h1>
-            <p className="mt-4 h-72">
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </p>
+           <Paraphraser />
           </div>
         </Tabs>
       </div>
