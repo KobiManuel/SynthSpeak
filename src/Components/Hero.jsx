@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import logo from "../assets/logo.png";
 import Demo from "./Demo";
-import link from '../assets/link.png';
+import ArticleText from "./ArticleText";
 
 const Hero = () => {
 
@@ -238,22 +238,7 @@ function Tabs({ children }) {
             <Demo />
           </div>
           <div title="Tab 2">
-            <form className="relative flex justify-center items-center w-[50%] mx-auto">
-              <span className=" absolute left-0 flex items-center justify-center my-2 ml-3 w-5 text-white rounded-full min-h-[20px] max-h-[20px] text-center text-[11px] bg-black ">
-                ✎
-              </span>
-              <textarea
-                placeholder="Enter Article"
-                required
-                className="url_input peer h-[42px]"
-              />
-              <button
-                type="submit"
-                className="submit_btn peer-focus:border-[#9747ff] peer-focus:text-black hover:border-[#9747ff]"
-              >
-                ➚
-              </button>
-            </form>
+           <ArticleText />
           </div>
           <div title="Tab 3">
             <h1 className="text-2xl font-bold">Tab 3 Content</h1>

@@ -1,6 +1,6 @@
 import React from 'react'
 import Hero from './Components/Hero'
-import Demo from './Components/Demo'
+
 
 import './App.css'
 

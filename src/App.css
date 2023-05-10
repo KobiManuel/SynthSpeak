@@ -100,8 +100,61 @@
     transform: rotate(220deg) !important;
   }
   textarea {
-    resize: none;
-  }
+  resize: none;
+  overflow-y: scroll;
+  min-height: 42px;
+}
+/* textarea::-webkit-scrollbar {
+  height: 12px !important;
+  max-height: 12px !important;
+  width: 0.5rem;
+  background-color: #002240;
+  border-radius: 14px;
+  cursor: pointer !important;
+}
+textarea::-webkit-scrollbar-thumb {
+  height: 12px !important;
+  max-height: 12px !important;
+  cursor: pointer !important;
+} */
+
+textarea::-webkit-scrollbar {
+  height: 1rem;
+  width: 0.3rem;
+}
+
+textarea::-webkit-scrollbar:horizontal {
+  height: 0.5rem;
+  width: 1rem;
+}
+
+textarea::-webkit-scrollbar-track {
+  background-color: transparent;
+  border-radius: 9999px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  --tw-border-opacity: 1;
+  background-color: #002240;
+  border-color: rgba(255, 255, 255, var(--tw-border-opacity));
+  border-radius: 9999px;
+  border-width: 1px;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgba(236, 236, 241, var(--tw-bg-opacity));
+}
+
+textarea::-webkit-scrollbar-thumb {
+  --tw-bg-opacity: 1;
+  background-color: black;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+  --tw-bg-opacity: 1;
+  background-color: #9747ff;
+}
 
 @media screen and (max-width: 640px) {
   .main {
@@ -136,7 +189,7 @@
 }
 
 .submit_btn {
-  @apply hover:border-gray-700 hover:text-gray-700 absolute inset-y-0 right-0 my-1.5 mr-1.5 flex w-10 items-center justify-center rounded border border-gray-200 font-sans text-sm font-medium text-gray-400;
+  @apply hover:border-gray-700 hover:text-gray-700 absolute max-h-[30px] inset-y-0 right-0 my-1.5 mr-1.5 flex w-10 items-center justify-center rounded border border-gray-200 font-sans text-sm font-medium text-gray-400;
 }
 
 .link_card {
