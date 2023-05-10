@@ -2,21 +2,15 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const rapidApiKey = import.meta.env.VITE_RAPID_API_KEY_SYNTHSPEAK;
 
-const { articleEndpoint = false } = getState()._persist;
-
 export const articleApi = createApi({
   reducerPath: "articleApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: articleEndpoint
-      ? "https://article-extractor-and-summarizer.p.rapidapi.com/"
-      : "https://paraphrasing-tool1.p.rapidapi.com/api/",
+    baseUrl: "https://article-extractor-and-summarizer.p.rapidapi.com/",
     prepareHeaders: (headers) => {
       headers.set("X-RapidAPI-Key", rapidApiKey);
       headers.set(
         "X-RapidAPI-Host",
-        articleEndpoint
-          ? "article-extractor-and-summarizer.p.rapidapi.com"
-          : "paraphrasing-tool1.p.rapidapi.com"
+        "article-extractor-and-summarizer.p.rapidapi.com"
       );
       return headers;
     },
@@ -32,26 +26,45 @@ export const articleApi = createApi({
         method: "POST",
         body: { text, length: 3 },
         headers: {
-          "content-type": "application/json",
+          "Content-Type": "application/json",
         },
-      }),
-    }),
-    paraphraseText: builder.query({
-      query: (text) => ({
-          method: "POST",
-          url: "/rewrite",
-          headers: {
-            "content-type": "application/json",
-          },
-          data: {
-            sourceText: text,
-          },
       }),
     }),
   }),
 });
 
-export const { useLazyGetSummaryQuery, useLazySummarizeTextQuery, useLazyParaphraseTextQuery } = articleApi;
+export const { useLazyGetSummaryQuery, useLazySummarizeTextQuery } = articleApi;
+
+
+
+export const paraphraseApi = createApi({
+  reducerPath: "paraphraseApi",
+  baseQuery: fetchBaseQuery({
+    baseUrl: "https://paraphrasing-tool1.p.rapidapi.com/",
+    prepareHeaders: (headers) => {
+      headers.set("X-RapidAPI-Key", rapidApiKey);
+      headers.set("X-RapidAPI-Host", "paraphrasing-tool1.p.rapidapi.com");
+      return headers;
+    },
+  }),
+  endpoints: (builder) => ({
+    paraphraseText: builder.query({
+      query: (text) => ({
+        url: "/api/rewrite",
+        method: "POST",
+        body: {
+          sourceText: text,
+          length: 3,
+        },
+        headers: {
+          "content-type": "application/json",
+        },
+      }),
+    }),
+  }),
+});
+
+export const { useLazyParaphraseTextQuery } = paraphraseApi;
 
 // import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 

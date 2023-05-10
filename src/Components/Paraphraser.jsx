@@ -1,16 +1,74 @@
-import React, { useState } from "react";
-import { copy } from "../assets";
-
+import React, { useState, useEffect } from "react";
+import { copy, tick } from "../assets";
+import { useLazyParaphraseTextQuery } from "../provider/article"; 
+import Loader from "./Loader";
 const Paraphraser = () => {
-  const [count, setCount] = useState(0);
+    const [count, setCount] = useState(0)
+    const [paraphrasedCount, setparaphrasedCount] = useState(0);
+  const [article, setArticle] = useState({
+    text: "",
+    summary: "",
+  });
+  const [allArticles, setAllArticles] = useState([]);
+
+  const [paraphraseText, { error, isFetching }] = useLazyParaphraseTextQuery();
+
+  useEffect(() => {
+    const articlesFromLocalStorage = JSON.parse(
+      localStorage.getItem("paraphrasedText")
+    );
+    if (articlesFromLocalStorage) {
+      setAllArticles(articlesFromLocalStorage);
+    }
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { data } = await paraphraseText(article.text);
+
+    if (data?.summary) {
+      const newArticle = { ...article, summary: data.summary };
+      const updatedAllArticles = [newArticle, ...allArticles];
+
+      setArticle(newArticle);
+      setAllArticles(updatedAllArticles);
+      localStorage.setItem("paraphrasedText", JSON.stringify(updatedAllArticles));
+    }
+  };
+  const handleDelete = () => {
+    setArticle({
+      ...article,
+      text: "",
+      summary: ""
+    });
+    setCount(0);
+    setparaphrasedCount(0);
+  };
+
   return (
     <div>
-      <form className="flex justify-between gap-6">
+      <form onSubmit={handleSubmit} className="flex justify-between gap-6">
         <div className="relative border border-gray-300 w-[50%] pt-6 px-2 pb-2 bg-white">
-          <span className="copy_btn absolute right-1 top-1 bg-white/5 !w-[30px] !h-[30px] text-red-500 font-semibold">
+          <span
+            onClick={handleDelete}
+            className="copy_btn absolute right-1 top-1 bg-white/5 !w-[30px] !h-[30px] text-red-500 font-semibold"
+          >
             🗑
           </span>
           <textarea
+            value={article.text}
+            onChange={(e) => {
+              const wordCount = e.target.value.trim().split(/\s+/).length || 0;
+              setArticle({
+                ...article,
+                text: e.target.value,
+              });
+              setCount(wordCount);
+              if (wordCount === 1) {
+                setCount(0);
+              }
+            }}
+            required
             placeholder="Enter or paste text here to paraphrase"
             className="w-full h-72 font-serif outline-none border-none"
           />
@@ -29,16 +87,33 @@ const Paraphraser = () => {
           </div>
         </div>
         <div className="border border-gray-300 w-[50%] pt-6 px-2 bg-white">
-          <input
-            placeholder="Paraphrased text results will appear here"
-            type="text"
-            className="w-full h-72 font-serif outline-none border-none placeholder:absolute placeholder:top-1"
-            readOnly
-          />
+          <div className=" h-[18.2rem] max-w-full flex justify-center items-center">
+            {isFetching ? (
+              <Loader size={70} />
+            ) : error ? (
+              <p className="font-poppins font-bold text-black text-center">
+                Houston, we have a problem...
+                <br />
+                <span className="font-poppins font-normal text-gray-700">
+                  {error?.data?.error}
+                </span>
+              </p>
+            ) : (
+              article.summary && (
+                <input
+                  placeholder="Paraphrased text results will appear here"
+                  type="text"
+                  className="w-full h-72 font-serif outline-none border-none placeholder:absolute placeholder:top-1"
+                  readOnly
+                  value={article.summary}
+                />
+              )
+            )}
+          </div>
           <div className="flex justify-between items-center">
             <span className="flex items-center w-fit px-2  rounded-[26px] max-h-[24px] border border-gray-300">
               <p className=" text-[14px]">
-                Word Count: <span>{count}</span>{" "}
+                Word Count: <span>{paraphrasedCount}</span>{" "}
               </p>
             </span>
             <button

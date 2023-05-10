@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { copy, loader, tick } from "../assets";
-import link from "../assets/link.png";
+import { copy, tick } from "../assets";
 import { useLazySummarizeTextQuery } from "../provider/article";
 import Loader from "./Loader";
 const ArticleText = () => {
