@@ -87,18 +87,24 @@ const Paraphraser = () => {
           </div>
         </div>
         <div className="border border-gray-300 w-[50%] pt-6 px-2 bg-white">
-          <div className=" h-[18.2rem] max-w-full flex justify-center items-center">
+          <div className=" h-[18.2rem] max-w-full">
             {isFetching ? (
               <Loader size={70} />
             ) : error ? (
-              <p className="font-poppins font-bold text-black text-center">
-                Houston, we have a problem...
-                <br />
-                <span className="font-poppins font-normal text-gray-700">
-                  {error?.data?.error}
-                </span>
+              <p
+                onLoadCapture={() => setparaphrasedCount(15)}
+                className="font-poppins font-bold text-black"
+              >
+                {article.text}
               </p>
             ) : (
+              //   <p className="font-poppins font-bold text-black text-center">
+              //     Houston, we have a problem...
+              //     <br />
+              //     <span className="font-poppins font-normal text-gray-700">
+              //       {error?.data?.error}
+              //     </span>
+              //   </p>
               article.summary && (
                 <input
                   placeholder="Paraphrased text results will appear here"

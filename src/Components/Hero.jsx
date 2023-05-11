@@ -13,7 +13,7 @@ function Tab({ title, active, onClick, className }) {
   return (
     <li
       onClick={onClick}
-      className={`cursor-pointer px-3 py-2 rounded-md text-sm font-semibold ${activeClasses} ${className}`}
+      className={`cursor-pointer text-center max-[357px]:text-xs px-3 py-2 rounded-md text-sm font-semibold ${activeClasses} ${className}`}
     >
       {title}
     </li>
