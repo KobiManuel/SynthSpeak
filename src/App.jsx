@@ -1,8 +1,7 @@
-import React from 'react'
-import Hero from './Components/Hero'
+import React from "react";
+import Hero from "./Components/Hero";
 
-
-import './App.css'
+import "./App.css";
 
 const App = () => {
   return (
@@ -16,6 +15,6 @@ const App = () => {
       </div>
     </main>
   );
-}
+};
 
-export default App
+export default App;

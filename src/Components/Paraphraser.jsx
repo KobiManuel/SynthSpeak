@@ -3,7 +3,8 @@ import { copy, tick } from "../assets";
 import { useLazyParaphraseTextQuery } from "../provider/article"; 
 import Loader from "./Loader";
 const Paraphraser = () => {
-    const [count, setCount] = useState(0)
+    const [count, setCount] = useState(0);
+    const [copied, setCopied] = useState(false)
     const [paraphrasedCount, setparaphrasedCount] = useState(0);
   const [article, setArticle] = useState({
     text: "",
@@ -44,14 +45,29 @@ const Paraphraser = () => {
     setCount(0);
     setparaphrasedCount(0);
   };
+   
+  const handleCopy = (event) => {
+     const button = event.currentTarget;
+     const div = button.parentNode;
+     const text = div.querySelector(".paraphrased_text").textContent;
+     navigator.clipboard.writeText(text);
+     setCopied(true);
+
+     setTimeout(() => {
+       setCopied(false);
+     }, 3000);
+  }
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="flex justify-between gap-6">
-        <div className="relative border border-gray-300 w-[50%] pt-6 px-2 pb-2 bg-white">
+      <form
+        onSubmit={handleSubmit}
+        className="flex justify-between gap-6 max-[780px]:flex-col max-[780px]:items-center"
+      >
+        <div className="relative border border-gray-300 w-[50%] pt-6 px-2 pb-2 bg-white max-[780px]:w-[100%]">
           <span
             onClick={handleDelete}
-            className="copy_btn absolute right-1 top-1 bg-white/5 !w-[30px] !h-[30px] text-red-500 font-semibold"
+            className="copy_btn absolute right-1 top-[1px] bg-white/5 !w-[30px] !h-[30px] text-red-500 font-semibold"
           >
             🗑
           </span>
@@ -72,7 +88,7 @@ const Paraphraser = () => {
             placeholder="Enter or paste text here to paraphrase"
             className="w-full h-72 font-serif outline-none border-none"
           />
-          <div className="flex justify-between">
+          <div className="flex items-center justify-between">
             <span className="flex w-fit px-2 max-h-[24px] rounded-[26px] border border-gray-300">
               <p className=" text-[14px]">
                 Word Count: <span> {count}</span>{" "}
@@ -86,17 +102,25 @@ const Paraphraser = () => {
             </button>
           </div>
         </div>
-        <div className="border border-gray-300 w-[50%] pt-6 px-2 bg-white">
+        <div className="border border-gray-300 w-[50%] pt-6 px-2 bg-white max-[780px]:w-[100%]">
           <div className=" h-[18.2rem] max-w-full">
             {isFetching ? (
               <Loader size={70} />
             ) : error ? (
-              <p
-                onLoadCapture={() => setparaphrasedCount(15)}
-                className="font-poppins font-bold text-black"
-              >
-                {article.text}
-              </p>
+              <textarea
+                value={article.text}
+                onLoad={(e) => {
+                  const wordCount =
+                    e.target.value.trim().split(/\s+/).length || 0;
+                  setparaphrasedCount(wordCount);
+                  if (wordCount === 1) {
+                    setparaphrasedCount(0);
+                  }
+                }}
+                readOnly
+                placeholder="Enter or paste text here to paraphrase"
+                className="paraphrased_text w-full h-72 font-serif outline-none border-none text-gray-600"
+              />
             ) : (
               //   <p className="font-poppins font-bold text-black text-center">
               //     Houston, we have a problem...
@@ -125,8 +149,9 @@ const Paraphraser = () => {
             <button
               type="button"
               className="copy_btn bg-white/5 !w-[35px] !h-[35px]"
+              onClick={() => handleCopy(event)}
             >
-              <img src={copy} alt="copy text" />
+              <img src={copied ? tick : copy} alt="copy text" />
             </button>
           </div>
         </div>

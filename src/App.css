@@ -156,6 +156,14 @@ textarea::-webkit-scrollbar-thumb:hover {
   background-color: #9747ff;
 }
 
+a {
+  border-right: 1px solid #9747ff;
+  padding-right: 8px;
+}
+a:last-child {
+   border-right: none;
+}
+
 @media screen and (max-width: 640px) {
   .main {
     padding: 0;
