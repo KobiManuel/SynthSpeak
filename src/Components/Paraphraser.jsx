@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { copy, tick } from "../assets";
-import { useLazyParaphraseTextQuery } from "../provider/article"; 
+import { useLazyParaphraseTextQuery } from "../provider/article";
 import Loader from "./Loader";
 const Paraphraser = () => {
-    const [count, setCount] = useState(0);
-    const [copied, setCopied] = useState(false)
-    const [paraphrasedCount, setparaphrasedCount] = useState(0);
+  const [count, setCount] = useState(0);
+  const [copied, setCopied] = useState(false);
+  const [paraphrasedCount, setparaphrasedCount] = useState(0);
   const [article, setArticle] = useState({
     text: "",
     summary: "",
@@ -33,30 +33,33 @@ const Paraphraser = () => {
 
       setArticle(newArticle);
       setAllArticles(updatedAllArticles);
-      localStorage.setItem("paraphrasedText", JSON.stringify(updatedAllArticles));
+      localStorage.setItem(
+        "paraphrasedText",
+        JSON.stringify(updatedAllArticles)
+      );
     }
   };
   const handleDelete = () => {
     setArticle({
       ...article,
       text: "",
-      summary: ""
+      summary: "",
     });
     setCount(0);
     setparaphrasedCount(0);
   };
-   
-  const handleCopy = (event) => {
-     const button = event.currentTarget;
-     const div = button.parentNode;
-     const text = div.querySelector(".paraphrased_text").textContent;
-     navigator.clipboard.writeText(text);
-     setCopied(true);
 
-     setTimeout(() => {
-       setCopied(false);
-     }, 3000);
-  }
+  const handleCopy = (event) => {
+    const button = event.currentTarget;
+    const div = button.parentNode;
+    const text = div.querySelector(".paraphrased_text").textContent;
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 3000);
+  };
 
   return (
     <div>
@@ -103,13 +106,21 @@ const Paraphraser = () => {
           </div>
         </div>
         <div className="border border-gray-300 w-[50%] pt-6 px-2 bg-white max-[780px]:w-[100%]">
-          <div className=" h-[18.2rem] max-w-full">
+          <div className=" relative h-[18.2rem] max-w-full">
             {isFetching ? (
-              <Loader size={70} />
+              <div className="loader-svg">
+                <Loader size={70} />
+              </div>
             ) : error ? (
               <textarea
-                value={article.text}
+                value={
+                  "I'm sorry, this Feature is undergoing some maintenance and won't be available for now"
+                }
                 onLoad={(e) => {
+                  console.log(
+                    "it is",
+                    e.target.value.trim().split(/\s+/).length
+                  );
                   const wordCount =
                     e.target.value.trim().split(/\s+/).length || 0;
                   setparaphrasedCount(wordCount);
