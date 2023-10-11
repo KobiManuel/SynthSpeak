@@ -162,13 +162,19 @@ a:last-child {
   border-right: none;
 }
 
+@media screen and (max-width: 800px) {
+  * {
+    cursor: default !important;
+  }
+}
+
 @media screen and (max-width: 640px) {
   .main {
     padding: 0;
   }
   .logo {
     width: 8rem !important;
-    padding-top: 20px;
+    padding-top: 16px;
   }
 }
 
