@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { copy, loader, tick } from "../assets";
-import link from '../assets/link.png';
+import link from "../assets/link.png";
 import { useLazyGetSummaryQuery } from "../provider/article";
 import Loader from "./Loader";
 
@@ -9,56 +9,74 @@ const Demo = () => {
     url: "",
     summary: "",
   });
- const [copied, setCopied] = useState("")
- const [copiedArticle, setCopiedArticle] = useState(false);
+  const [copied, setCopied] = useState("");
+  const [copiedArticle, setCopiedArticle] = useState(false);
   const [allArticles, setAllArticles] = useState([]);
+  const [trialLimit, setTrialLimit] = useState(false);
+
+  const urlInputRef = useRef(null);
 
   const [getSummary, { error, isFetching }] = useLazyGetSummaryQuery();
+
+  const trialAccessedFromStorage = localStorage.getItem(
+    "synthspeakTrialAccessed"
+  );
 
   useEffect(() => {
     const articlesFromLocalStorage = JSON.parse(
       localStorage.getItem("articles")
     );
     if (articlesFromLocalStorage) {
-      setAllArticles(articlesFromLocalStorage)
+      setAllArticles(articlesFromLocalStorage);
     }
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (trialAccessedFromStorage) {
+      setTrialLimit(true);
+      urlInputRef.current.value = "";
+      return;
+    }
+
     const { data } = await getSummary({ articleUrl: article.url });
 
     if (data?.summary) {
       const newArticle = { ...article, summary: data.summary };
       const updatedAllArticles = [newArticle, ...allArticles];
+      if (trialLimit) {
+        setTrialLimit(false);
+      }
 
       setArticle(newArticle);
       setAllArticles(updatedAllArticles);
-      localStorage.setItem('articles', JSON.stringify(updatedAllArticles))
+      localStorage.setItem("articles", JSON.stringify(updatedAllArticles));
+      localStorage.setItem("synthspeakTrialAccessed", "true");
+      urlInputRef.current.value = "";
     }
   };
-   
-  const handleCopy = (copyUrl) => {
-     setCopied(copyUrl);
-     navigator.clipboard.writeText(copyUrl);
-     setTimeout(() => {
-      setCopied(false)
-     }, 3000);
-  }
 
-const handleCopyArticle = (event) => {
+  const handleCopy = (copyUrl) => {
+    setCopied(copyUrl);
+    navigator.clipboard.writeText(copyUrl);
+    setTimeout(() => {
+      setCopied(false);
+    }, 3000);
+  };
+
+  const handleCopyArticle = (event) => {
     const button = event.currentTarget;
     const div = button.parentNode;
     const copiedSpan = `<span class="copy_float">Copied!</span>`;
     const text = div.querySelector(".main_article").textContent;
     navigator.clipboard.writeText(text);
-     setCopiedArticle(true)
+    setCopiedArticle(true);
 
-      setTimeout(() => {
-        setCopiedArticle(false);
-      }, 3000);
-}
+    setTimeout(() => {
+      setCopiedArticle(false);
+    }, 3000);
+  };
 
   return (
     <section className="mt-3 w-full max-w-xl mx-auto">
@@ -74,8 +92,9 @@ const handleCopyArticle = (event) => {
           />
           <input
             type="url"
+            ref={urlInputRef}
             placeholder="Enter Url"
-            value={article.url}
+            // value={article.url}
             onChange={(e) => {
               setArticle({
                 ...article,
@@ -96,7 +115,12 @@ const handleCopyArticle = (event) => {
           {allArticles.map((item, index) => (
             <div
               key={`link-${index}`}
-              onClick={() => setArticle(item)}
+              onClick={() => {
+                if (trialLimit) {
+                  setTrialLimit(false);
+                }
+                setArticle(item);
+              }}
               className="link_card"
             >
               <div
@@ -129,31 +153,36 @@ const handleCopyArticle = (event) => {
               {error?.data?.error}
             </span>
           </p>
-        ) : (
-          article.summary && (
-            <div className="flex flex-col gap-3">
-              <h2 className="font-poppins font-bold text-gray-600 text-xl">
-                Article <span className="blue_gradient"> Summary</span>
-              </h2>
-              <div className="summary_box">
-                <div
-                  className="copy_btn absolute right-1 top-1"
-                  onClick={() => {
-                    handleCopyArticle(event);
-                  }}
-                >
-                  {copiedArticle && <span className="copy_float">Copied!</span>}
-                  <img
-                    src={copiedArticle ? tick : copy}
-                    alt="/"
-                    className="w-[40%] h-[40%] object-contain"
-                  />
-                </div>
-                <p className="main_article font-poppins font-medium text-[16px] text-gray-700 leading-8 py-4">
-                  {article.summary}
-                </p>
+        ) : article.summary ? (
+          <div className="flex flex-col gap-3">
+            <h2 className="font-poppins font-bold text-gray-600 text-xl">
+              Article <span className="blue_gradient"> Summary</span>
+            </h2>
+            <div className="summary_box">
+              <div
+                className="copy_btn absolute right-1 top-1"
+                onClick={() => {
+                  handleCopyArticle(event);
+                }}
+              >
+                {copiedArticle && <span className="copy_float">Copied!</span>}
+                <img
+                  src={copiedArticle ? tick : copy}
+                  alt="/"
+                  className="w-[40%] h-[40%] object-contain"
+                />
               </div>
+              <p className="main_article font-poppins font-medium text-[16px] text-gray-700 leading-8 py-4">
+                {article.summary}
+              </p>
             </div>
+          </div>
+        ) : (
+          trialLimit && (
+            <p className="main_article font-poppins font-medium text-[16px] text-red-700 leading-8 py-4">
+              ⚠ I'm sorry, requests are being limited to one trial per person to
+              save costs
+            </p>
           )
         )}
       </div>
