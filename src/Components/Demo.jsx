@@ -180,8 +180,8 @@ const Demo = () => {
         ) : (
           trialLimit && (
             <p className="main_article font-poppins font-medium text-[16px] text-red-700 leading-8 py-4">
-              ⚠ I'm sorry, requests are being limited to one trial per person to
-              save costs
+              ⚠ I'm sorry, requests for each feature are being limited to one
+              trial per person to save costs
             </p>
           )
         )}
