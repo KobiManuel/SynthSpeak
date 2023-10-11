@@ -24,7 +24,7 @@ const Demo = () => {
 
   useEffect(() => {
     const articlesFromLocalStorage = JSON.parse(
-      localStorage.getItem("articles")
+      localStorage.getItem("synthspeakUrlArticles")
     );
     if (articlesFromLocalStorage) {
       setAllArticles(articlesFromLocalStorage);
@@ -51,7 +51,10 @@ const Demo = () => {
 
       setArticle(newArticle);
       setAllArticles(updatedAllArticles);
-      localStorage.setItem("articles", JSON.stringify(updatedAllArticles));
+      localStorage.setItem(
+        "synthspeakUrlArticles",
+        JSON.stringify(updatedAllArticles)
+      );
       localStorage.setItem("synthspeakTrialAccessed", "true");
       urlInputRef.current.value = "";
     }

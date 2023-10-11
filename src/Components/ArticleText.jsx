@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { copy, tick } from "../assets";
 import { useLazySummarizeTextQuery } from "../provider/article";
 import Loader from "./Loader";
@@ -22,7 +22,7 @@ const ArticleText = () => {
 
   useEffect(() => {
     const articlesFromLocalStorage = JSON.parse(
-      localStorage.getItem("articleText")
+      localStorage.getItem("synthspeakTextArticles")
     );
     if (articlesFromLocalStorage) {
       setAllArticles(articlesFromLocalStorage);
@@ -62,7 +62,10 @@ const ArticleText = () => {
 
       setArticle(newArticle);
       setAllArticles(updatedAllArticles);
-      localStorage.setItem("articleText", JSON.stringify(updatedAllArticles));
+      localStorage.setItem(
+        "synthspeakTextArticles",
+        JSON.stringify(updatedAllArticles)
+      );
       localStorage.setItem("synthspeakTextTrialAccessed", "true");
       const textarea = document.querySelector("textarea");
       textInputRef.current.value = "";
