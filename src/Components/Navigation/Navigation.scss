@@ -1,4 +1,4 @@
-$size: 50px;
+$size: 40px;
 $items: 5;
 $transition: 0.5s;
 $bounce: cubic-bezier(0.3, 1.4, 0.5, 0.9);
@@ -22,11 +22,13 @@ $start-rot: 190deg;
 
   &.open {
     transform: translate3d(0, 0, 0);
+    top: -140px !important;
+    right: -120px !important;
   }
 
   &.top-right {
-    top: -170px;
-    right: -150px;
+    top: -130px;
+    right: 1%;
   }
 }
 
@@ -136,5 +138,37 @@ $start-rot: 190deg;
     color: rgba($color-inner, 0.5);
     transform: scale(0.9);
     transition-duration: 0s;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .top-right {
+    &.top-right {
+      right: -12%;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .top-right {
+    &.top-right {
+      right: -22%;
+    }
+  }
+}
+
+@media screen and (max-width: 453px) {
+  .top-right {
+    &.top-right {
+      right: -26%;
+    }
+  }
+}
+
+@media screen and (max-width: 364px) {
+  .top-right {
+    &.top-right {
+      right: -32%;
+    }
   }
 }

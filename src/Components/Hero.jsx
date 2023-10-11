@@ -216,7 +216,7 @@ const Hero = () => {
     <>
       <header className="w-full flex justify-center items-center flex-col">
         <nav className=" w-full !flex flex-row justify-between items-center mb-10 pt-3">
-          <img src={logo} alt="logo" className=" w-40 object-cover" />
+          <img src={logo} alt="logo" className=" logo w-40 object-cover" />
           <Navigation />
           {/* <div className="flex gap-4 font-medium">
             <a href="https://twitter.com/KobiManuell" target="blank">
