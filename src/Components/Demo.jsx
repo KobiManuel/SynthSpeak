@@ -175,7 +175,7 @@ const Demo = () => {
                   className="w-[40%] h-[40%] object-contain"
                 />
               </div>
-              <p className="main_article font-poppins font-medium text-[16px] text-gray-700 leading-8 py-4">
+              <p className="main_article font-poppins font-medium text-[16px] text-gray-700 leading-8 py-4 whitespace-pre-wrap">
                 {article.summary}
               </p>
             </div>
