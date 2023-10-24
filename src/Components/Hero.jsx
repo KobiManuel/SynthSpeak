@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo1.png";
 import Demo from "./Demo";
 import ArticleText from "./ArticleText";
 import Paraphraser from "./Paraphraser";
@@ -8,7 +8,7 @@ import Navigation from "./Navigation/Navigation";
 const Hero = () => {
   function Tab({ title, active, onClick, className }) {
     const activeClasses = active
-      ? "bg-gray-100 text-gray-900"
+      ? "bg-black/5 text-gray-900"
       : "text-gray-500 hover:text-gray-700";
     return (
       <li
@@ -134,7 +134,7 @@ const Hero = () => {
     const tabs = React.Children.toArray(children);
 
     return (
-      <div className="border border-gray-300 rounded-md">
+      <div className="border border-gray-400 rounded-md">
         <Slider
           activeTab={activeTab}
           numTabs={tabs.length}

@@ -23,7 +23,7 @@
 
 .main:before {
   background-color: white;
-  background-image: url(../src/assets/bg_.png);
+  background-image: url(../src/assets/image3.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -175,6 +175,15 @@ a:last-child {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+}
+
+.drawer {
+  box-shadow: 0px 24px 48px 0px #555;
+}
+
+.drawer::-webkit-scrollbar-thumb {
+  background: #5555553b !important;
+  border-radius: 5px;
 }
 
 @media screen and (max-width: 800px) {

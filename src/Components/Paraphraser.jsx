@@ -136,14 +136,22 @@ const Paraphraser = () => {
       <div
         className={
           isDrawerOpen
-            ? " absolute p-2 right-0 top-0 w-[306px] max-[420px]:w-[200px]  h-full border-r border-r-slate-200 bg-gray-50 ease-in-out duration-500 overflow-y-auto z-20"
+            ? " drawer absolute p-2 right-0 top-0 w-[306px] max-[420px]:w-[200px]  h-full border-r border-r-slate-200 bg-gray-50 ease-in-out duration-500 overflow-y-auto z-20"
             : "right-[-100%] p-2 absolute top-0 w-[306px] max-[420px]:w-[200px] h-full border-r border-r-slate-200 bg-gray-50 overflow-y-auto z-20"
         }
       >
         <h2>History</h2>
         <ul className="flex flex-col gap-2">
           {allArticles.map((article, index) => (
-            <li className="link_card" key={index}>
+            <li
+              className="link_card"
+              key={index}
+              onClick={() => {
+                setArticle(article);
+                setIsDrawerOpen(false);
+                setChangesMade(true);
+              }}
+            >
               <p className="flex-1 font-poppins text-blue-700 font-medium text-sm truncate">
                 {article.text}
               </p>
@@ -155,7 +163,7 @@ const Paraphraser = () => {
         <button
           onClick={toggleDrawer}
           type="button"
-          class="copy_btn bg-white/5 !w-[30px] !h-[30px] hover:bg-gray-200 text-[14px] absolute top-2 z-10 right-1"
+          class="copy_btn !bg-black/5 !w-[30px] !h-[30px] text-[14px] absolute top-2 z-10 right-1"
         >
           ↺
         </button>
@@ -168,8 +176,8 @@ const Paraphraser = () => {
         {buttons.map((label, index) => (
           <button
             key={index}
-            className={`border p-1 min-w-[100px] max-w-[100px] rounded-[100px] max-[420px]:max-w-[70px]  max-[420px]:min-w-[70px]  hover:bg-black hover:text-white  max-[772px]:self-center max-[772px]:justify-self-center ${
-              index === activeMode ? "bg-black text-white" : "bg-white"
+            className={`border border-gray-300 p-1 min-w-[100px] max-w-[100px] rounded-[100px] max-[420px]:max-w-[70px]  max-[420px]:min-w-[70px]  hover:bg-black hover:text-white  max-[772px]:self-center max-[772px]:justify-self-center ${
+              index === activeMode ? "bg-black text-white" : "bg-transparent"
             }`}
             onClick={() => handleModeClick(index)}
             style={{
