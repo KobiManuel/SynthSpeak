@@ -44,6 +44,10 @@ const Paraphraser = () => {
         summary: "",
       });
     } else {
+      setArticle({
+        ...article,
+        summary: "",
+      });
       setChangesMade(true);
     }
   }, [count]);
@@ -109,7 +113,6 @@ const Paraphraser = () => {
   const handleCopyArticle = (event) => {
     const button = event.currentTarget;
     const div = button.parentNode;
-    const copiedSpan = `<span class="copy_float">Copied!</span>`;
     const text = div.querySelector(".paraphrased-text").textContent;
     navigator.clipboard.writeText(text);
     setCopied(true);
@@ -265,7 +268,7 @@ const Paraphraser = () => {
               //   </p>
               <p
                 ref={paraphrasedTextRef}
-                className="font-serif whitespace-pre-wrap"
+                className="paraphrased-text font-serif whitespace-pre-wrap"
               >
                 {article.summary ? (
                   article.summary
