@@ -14,6 +14,7 @@ const Paraphraser = () => {
   const [activeMode, setActiveMode] = useState(0);
   const [suggestionIndex, setSuggestionIndex] = useState(0);
   const [suggestions, setSuggestions] = useState({});
+  const [changesMade, setChangesMade] = useState(false);
 
   const [paraphraseText, { error, isFetching }] = useLazyParaphraseTextQuery();
 
@@ -33,6 +34,8 @@ const Paraphraser = () => {
   useEffect(() => {
     if (count === 0) {
       article.summary = "";
+    } else {
+      setChangesMade(true);
     }
   }, [count]);
 
@@ -43,6 +46,7 @@ const Paraphraser = () => {
     const { data } = await paraphraseText({ text: article.text, style });
 
     if (data?.suggestions) {
+      setChangesMade(false);
       setSuggestions(data.suggestions);
       const newArticle = {
         ...article,
@@ -81,6 +85,7 @@ const Paraphraser = () => {
         "paraphrasedText",
         JSON.stringify(updatedAllArticles)
       );
+      setChangesMade(false);
     }
   };
 
@@ -154,7 +159,7 @@ const Paraphraser = () => {
                 Word Count: <span> {count}</span>{" "}
               </p>
             </span>
-            {article.summary.length < 1 ? (
+            {article.summary.length < 1 || changesMade ? (
               <button
                 type="submit"
                 className="bg-[#9747ff] text-base flex justify-center items-center text-white font-medium px-4 rounded-[26px] py-[2px] hover:bg-[#3f1e6b]"
