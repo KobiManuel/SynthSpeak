@@ -169,6 +169,14 @@ a:last-child {
   transform: translate(-50%, -50%);
 }
 
+.grid-btns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 100px));
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
 @media screen and (max-width: 800px) {
   * {
     cursor: default !important;

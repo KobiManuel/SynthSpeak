@@ -11,6 +11,7 @@ const Paraphraser = () => {
     summary: "",
   });
   const [allArticles, setAllArticles] = useState([]);
+  const [activeMode, setActiveMode] = useState(null);
 
   const [paraphraseText, { error, isFetching }] = useLazyParaphraseTextQuery();
 
@@ -51,10 +52,11 @@ const Paraphraser = () => {
     setCount(0);
   };
 
-  const handleCopy = (event) => {
+  const handleCopyArticle = (event) => {
     const button = event.currentTarget;
     const div = button.parentNode;
-    const text = div.querySelector(".paraphrased_text").textContent;
+    const copiedSpan = `<span class="copy_float">Copied!</span>`;
+    const text = div.querySelector(".paraphrased-text").textContent;
     navigator.clipboard.writeText(text);
     setCopied(true);
 
@@ -63,8 +65,31 @@ const Paraphraser = () => {
     }, 3000);
   };
 
+  const buttons = ["General", "Casual", "Formal", "Long", "Short"];
+
+  const handleModeClick = (index) => {
+    setActiveMode(index);
+  };
+
   return (
-    <div className="p-6">
+    <div className="px-6 pb-6">
+      <span className="p-2 grid-btns">
+        {" "}
+        {buttons.map((label, index) => (
+          <button
+            key={index}
+            className={`border p-1 min-w-[100px] max-w-[100px] rounded-[100px] max-[420px]:max-w-[70px]  max-[420px]:min-w-[70px]  hover:bg-black hover:text-white  max-[772px]:self-center max-[772px]:justify-self-center ${
+              index === activeMode ? "bg-black text-white" : "bg-white"
+            }`}
+            onClick={() => handleModeClick(index)}
+            style={{
+              transition: "background-color 0.2s ease-in-out",
+            }}
+          >
+            {label}
+          </button>
+        ))}
+      </span>
       <form
         onSubmit={handleSubmit}
         className="flex justify-between gap-6 max-[780px]:flex-col max-[780px]:items-center"
@@ -93,7 +118,7 @@ const Paraphraser = () => {
             placeholder="Enter or paste text here to paraphrase"
             className="w-full h-72 font-serif outline-none border-none"
           />
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between max-[349px]:flex-col max-[349px]:gap-4">
             <span className="flex w-fit px-2 max-h-[24px] rounded-[26px] border border-gray-300">
               <p className=" text-[14px]">
                 Word Count: <span> {count}</span>{" "}
@@ -101,7 +126,7 @@ const Paraphraser = () => {
             </span>
             <button
               type="submit"
-              className="bg-[#9747ff]  text-base flex justify-center items-center text-white font-medium px-4 rounded-[26px] py-[2px] hover:bg-[#3f1e6b]"
+              className="bg-[#9747ff] text-base flex justify-center items-center text-white font-medium px-4 rounded-[26px] py-[2px] hover:bg-[#3f1e6b]"
             >
               Paraphrase ⟳
             </button>
@@ -144,7 +169,7 @@ const Paraphraser = () => {
               //   </p>
               <p
                 ref={paraphrasedTextRef}
-                className="w-full h-72 font-serif outline-none border-none placeholder:absolute placeholder:top-1 whitespace-pre-wrap"
+                className="w-full h-72 font-serif paraphrased-text outline-none border-none placeholder:absolute placeholder:top-1 whitespace-pre-wrap"
               >
                 {article.summary ? (
                   article.summary
@@ -171,7 +196,7 @@ const Paraphraser = () => {
             <button
               type="button"
               className="copy_btn bg-white/5 !w-[35px] !h-[35px]"
-              onClick={() => handleCopy(event)}
+              onClick={() => handleCopyArticle(event)}
             >
               <img src={copied ? tick : copy} alt="copy text" />
             </button>
