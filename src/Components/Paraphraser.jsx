@@ -16,6 +16,11 @@ const Paraphraser = () => {
   const [suggestions, setSuggestions] = useState({});
   const [changesMade, setChangesMade] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const toggleDrawer = () => {
+    setIsDrawerOpen((prevIsDrawerOpen) => !prevIsDrawerOpen);
+  };
 
   const [paraphraseText, { error, isFetching }] = useLazyParaphraseTextQuery();
 
@@ -34,7 +39,10 @@ const Paraphraser = () => {
 
   useEffect(() => {
     if (count === 0) {
-      article.summary = "";
+      setArticle({
+        ...article,
+        summary: "",
+      });
     } else {
       setChangesMade(true);
     }
@@ -116,7 +124,45 @@ const Paraphraser = () => {
   };
 
   return (
-    <div className="px-6 pb-6">
+    <div className="px-6 pb-6 relative overflow-x-hidden">
+      <div
+        onClick={toggleDrawer}
+        className={
+          isDrawerOpen
+            ? "absolute left-0 bg-transparent opacity-[.7] dark:bg-opacity-80 inset-0 z-20 w-[100%] ease-in-out duration-500"
+            : "absolute bg-transparent opacity-[.7] dark:bg-opacity-80 inset-0 z-20 w-[100%] left-[-100%]"
+        }
+      ></div>
+      <div
+        className={
+          isDrawerOpen
+            ? " absolute p-2 right-0 top-0 w-[306px] max-[420px]:w-[200px]  h-full border-r border-r-slate-200 bg-gray-50 ease-in-out duration-500 overflow-y-auto z-20"
+            : "right-[-100%] p-2 absolute top-0 w-[306px] max-[420px]:w-[200px] h-full border-r border-r-slate-200 bg-gray-50 overflow-y-auto z-20"
+        }
+      >
+        <h2>History</h2>
+        <ul className="flex flex-col gap-2">
+          {allArticles.map((article, index) => (
+            <li className="link_card" key={index}>
+              <p className="flex-1 font-poppins text-blue-700 font-medium text-sm truncate">
+                {article.text}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="group relative">
+        <button
+          onClick={toggleDrawer}
+          type="button"
+          class="copy_btn bg-white/5 !w-[30px] !h-[30px] hover:bg-gray-200 text-[14px] absolute top-2 z-10 right-1"
+        >
+          ↺
+        </button>
+        <span class="hidden group-hover:inline-block absolute top-0 z-20 right-[3%] p-1 text-[12px]">
+          History
+        </span>
+      </div>
       <span className="p-2 grid-btns">
         {" "}
         {buttons.map((label, index) => (
