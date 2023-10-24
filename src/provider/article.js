@@ -48,15 +48,15 @@ export const paraphraseApi = createApi({
   }),
   endpoints: (builder) => ({
     paraphraseText: builder.query({
-      query: (text, style) => ({
+      query: ({ text, style }) => ({
         url: "/v1/paraphrase",
         method: "POST",
         body: JSON.stringify({
-          text,
+          text: text,
+          style: style,
           startIndex: 0,
           top_k: 1,
           threshold: 0.8,
-          style: style,
         }),
         headers: {
           "content-type": "application/json",

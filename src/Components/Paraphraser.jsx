@@ -19,6 +19,8 @@ const Paraphraser = () => {
 
   const paraphrasedTextRef = useRef(null);
 
+  const buttons = ["General", "Casual", "Formal", "Long", "Short"];
+
   useEffect(() => {
     const articlesFromLocalStorage = JSON.parse(
       localStorage.getItem("paraphrasedText")
@@ -28,9 +30,17 @@ const Paraphraser = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (count === 0) {
+      article.summary = "";
+    }
+  }, [count]);
+
+  const style = buttons[activeMode].toLowerCase();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { data } = await paraphraseText(article.text, buttons[activeMode]);
+    const { data } = await paraphraseText({ text: article.text, style });
 
     if (data?.suggestions) {
       setSuggestions(data.suggestions);
@@ -86,8 +96,6 @@ const Paraphraser = () => {
       setCopied(false);
     }, 3000);
   };
-
-  const buttons = ["General", "Casual", "Formal", "Long", "Short"];
 
   const handleModeClick = (index) => {
     setActiveMode(index);
@@ -175,18 +183,6 @@ const Paraphraser = () => {
                 value={
                   "I'm sorry, this Feature is undergoing some maintenance and won't be available for now"
                 }
-                onLoad={(e) => {
-                  console.log(
-                    "it is",
-                    e.target.value.trim().split(/\s+/).length
-                  );
-                  const wordCount =
-                    e.target.value.trim().split(/\s+/).length || 0;
-                  setparaphrasedCount(wordCount);
-                  if (wordCount === 1) {
-                    setparaphrasedCount(0);
-                  }
-                }}
                 readOnly
                 placeholder="Enter or paste text here to paraphrase"
                 className="paraphrased_text w-full h-72 font-serif outline-none border-none text-gray-600"
@@ -201,7 +197,7 @@ const Paraphraser = () => {
               //   </p>
               <p
                 ref={paraphrasedTextRef}
-                className="w-full h-72 font-serif paraphrased-text outline-none border-none placeholder:absolute placeholder:top-1 whitespace-pre-wrap"
+                className="font-serif whitespace-pre-wrap"
               >
                 {article.summary ? (
                   article.summary
@@ -218,10 +214,7 @@ const Paraphraser = () => {
               <p className=" text-[14px]">
                 Word Count:{" "}
                 <span>
-                  {article.summary
-                    ? paraphrasedTextRef?.current?.innerText?.split(/\s+/)
-                        .length
-                    : 0}
+                  {article.summary ? article.summary.split(/\s+/).length : 0}
                 </span>{" "}
               </p>
             </span>
