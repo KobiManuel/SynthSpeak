@@ -146,7 +146,7 @@ const Paraphraser = () => {
         <h2>History</h2>
         <ul className="flex flex-col gap-2">
           {allArticles.length === 0 ? (
-            <li className="flex-1 text-blue-700 text-sm">
+            <li className="loader-svg flex-1 text-blue-700 text-sm">
               Nothing to see here yet
             </li>
           ) : (
