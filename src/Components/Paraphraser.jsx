@@ -11,7 +11,9 @@ const Paraphraser = () => {
     summary: "",
   });
   const [allArticles, setAllArticles] = useState([]);
-  const [activeMode, setActiveMode] = useState(null);
+  const [activeMode, setActiveMode] = useState(0);
+  const [suggestionIndex, setSuggestionIndex] = useState(0);
+  const [suggestions, setSuggestions] = useState({});
 
   const [paraphraseText, { error, isFetching }] = useLazyParaphraseTextQuery();
 
@@ -28,11 +30,14 @@ const Paraphraser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { data } = await paraphraseText(article.text);
+    const { data } = await paraphraseText(article.text, buttons[activeMode]);
 
     if (data?.suggestions) {
-      const newArticle = { ...article, summary: data.suggestions[0]?.text };
-      console.log("it is", data?.suggestions[0].text);
+      setSuggestions(data.suggestions);
+      const newArticle = {
+        ...article,
+        summary: data.suggestions[0]?.text,
+      };
       const updatedAllArticles = [newArticle, ...allArticles];
 
       setArticle(newArticle);
@@ -50,6 +55,23 @@ const Paraphraser = () => {
       summary: "",
     });
     setCount(0);
+  };
+
+  const handleRephrase = () => {
+    setSuggestionIndex((prevIndex) => (prevIndex + 1) % suggestions.length);
+    const nextSuggestion = suggestions[suggestionIndex];
+
+    if (nextSuggestion) {
+      setArticle({ ...article, summary: nextSuggestion.text });
+      const updatedAllArticles = [
+        { ...article, summary: nextSuggestion.text },
+        ...allArticles.slice(1),
+      ];
+      localStorage.setItem(
+        "paraphrasedText",
+        JSON.stringify(updatedAllArticles)
+      );
+    }
   };
 
   const handleCopyArticle = (event) => {
@@ -124,12 +146,22 @@ const Paraphraser = () => {
                 Word Count: <span> {count}</span>{" "}
               </p>
             </span>
-            <button
-              type="submit"
-              className="bg-[#9747ff] text-base flex justify-center items-center text-white font-medium px-4 rounded-[26px] py-[2px] hover:bg-[#3f1e6b]"
-            >
-              Paraphrase ⟳
-            </button>
+            {article.summary.length < 1 ? (
+              <button
+                type="submit"
+                className="bg-[#9747ff] text-base flex justify-center items-center text-white font-medium px-4 rounded-[26px] py-[2px] hover:bg-[#3f1e6b]"
+              >
+                Paraphrase ⟳
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleRephrase}
+                className="bg-[#9747ff] text-base flex justify-center items-center text-white font-medium px-4 rounded-[26px] py-[2px] hover:bg-[#3f1e6b]"
+              >
+                Rephrase ⟳
+              </button>
+            )}
           </div>
         </div>
         <div className="border border-gray-300 w-[50%] pt-6 px-2 bg-white max-[780px]:w-[100%]">
@@ -198,6 +230,7 @@ const Paraphraser = () => {
               className="copy_btn bg-white/5 !w-[35px] !h-[35px]"
               onClick={() => handleCopyArticle(event)}
             >
+              {copied && <span className="copy_float">Copied!</span>}
               <img src={copied ? tick : copy} alt="copy text" />
             </button>
           </div>
