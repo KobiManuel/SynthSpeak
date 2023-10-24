@@ -15,6 +15,7 @@ const Paraphraser = () => {
   const [suggestionIndex, setSuggestionIndex] = useState(0);
   const [suggestions, setSuggestions] = useState({});
   const [changesMade, setChangesMade] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [paraphraseText, { error, isFetching }] = useLazyParaphraseTextQuery();
 
@@ -72,11 +73,15 @@ const Paraphraser = () => {
   };
 
   const handleRephrase = () => {
+    setIsLoading(true);
     setSuggestionIndex((prevIndex) => (prevIndex + 1) % suggestions.length);
     const nextSuggestion = suggestions[suggestionIndex];
 
     if (nextSuggestion) {
       setArticle({ ...article, summary: nextSuggestion.text });
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 300);
       const updatedAllArticles = [
         { ...article, summary: nextSuggestion.text },
         ...allArticles.slice(1),
@@ -179,7 +184,7 @@ const Paraphraser = () => {
         </div>
         <div className="border border-gray-300 w-[50%] pt-6 px-2 bg-white max-[780px]:w-[100%]">
           <div className=" relative h-[18.2rem] max-w-full">
-            {isFetching ? (
+            {isFetching || isLoading ? (
               <div className="loader-svg">
                 <Loader size={70} />
               </div>
