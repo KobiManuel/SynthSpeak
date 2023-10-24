@@ -143,7 +143,9 @@ const Hero = () => {
         {tabs.map((tab, index) => (
           <div
             key={index}
-            className={`p-6 ${index === activeTab ? "block" : "hidden"}`}
+            className={`${index !== 2 ? "p-6 " : ""}${
+              index === activeTab ? "block" : "hidden"
+            }`}
           >
             {tab.props.children}
           </div>

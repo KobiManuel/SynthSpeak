@@ -2,6 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const rapidApiKey = import.meta.env.VITE_RAPID_API_KEY_SYNTHSPEAK;
 
+const ai21ApiKey = import.meta.env.VITE_A121_API_KEY;
+
 export const articleApi = createApi({
   reducerPath: "articleApi",
   baseQuery: fetchBaseQuery({
@@ -35,27 +37,27 @@ export const articleApi = createApi({
 
 export const { useLazyGetSummaryQuery, useLazySummarizeTextQuery } = articleApi;
 
-
-
 export const paraphraseApi = createApi({
   reducerPath: "paraphraseApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://paraphrasing-tool1.p.rapidapi.com/",
+    baseUrl: "https://api.ai21.com/studio/",
     prepareHeaders: (headers) => {
-      headers.set("X-RapidAPI-Key", rapidApiKey);
-      headers.set("X-RapidAPI-Host", "paraphrasing-tool1.p.rapidapi.com");
+      headers.set("Authorization", `bearer ${ai21ApiKey}`);
       return headers;
     },
   }),
   endpoints: (builder) => ({
     paraphraseText: builder.query({
-      query: (text) => ({
-        url: "/api/rewrite",
+      query: (text, style) => ({
+        url: "/v1/paraphrase",
         method: "POST",
-        body: {
-          sourceText: text,
-          length: 3,
-        },
+        body: JSON.stringify({
+          text,
+          startIndex: 0,
+          top_k: 1,
+          threshold: 0.8,
+          style: style,
+        }),
         headers: {
           "content-type": "application/json",
         },

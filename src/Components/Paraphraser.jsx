@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { copy, tick } from "../assets";
 import { useLazyParaphraseTextQuery } from "../provider/article";
 import Loader from "./Loader";
@@ -14,6 +14,8 @@ const Paraphraser = () => {
 
   const [paraphraseText, { error, isFetching }] = useLazyParaphraseTextQuery();
 
+  const paraphrasedTextRef = useRef(null);
+
   useEffect(() => {
     const articlesFromLocalStorage = JSON.parse(
       localStorage.getItem("paraphrasedText")
@@ -27,8 +29,9 @@ const Paraphraser = () => {
     e.preventDefault();
     const { data } = await paraphraseText(article.text);
 
-    if (data?.summary) {
-      const newArticle = { ...article, summary: data.summary };
+    if (data?.suggestions) {
+      const newArticle = { ...article, summary: data.suggestions[0]?.text };
+      console.log("it is", data?.suggestions[0].text);
       const updatedAllArticles = [newArticle, ...allArticles];
 
       setArticle(newArticle);
@@ -46,7 +49,6 @@ const Paraphraser = () => {
       summary: "",
     });
     setCount(0);
-    setparaphrasedCount(0);
   };
 
   const handleCopy = (event) => {
@@ -62,7 +64,7 @@ const Paraphraser = () => {
   };
 
   return (
-    <div>
+    <div className="p-6">
       <form
         onSubmit={handleSubmit}
         className="flex justify-between gap-6 max-[780px]:flex-col max-[780px]:items-center"
@@ -140,21 +142,30 @@ const Paraphraser = () => {
               //       {error?.data?.error}
               //     </span>
               //   </p>
-              article.summary && (
-                <input
-                  placeholder="Paraphrased text results will appear here"
-                  type="text"
-                  className="w-full h-72 font-serif outline-none border-none placeholder:absolute placeholder:top-1"
-                  readOnly
-                  value={article.summary}
-                />
-              )
+              <p
+                ref={paraphrasedTextRef}
+                className="w-full h-72 font-serif outline-none border-none placeholder:absolute placeholder:top-1 whitespace-pre-wrap"
+              >
+                {article.summary ? (
+                  article.summary
+                ) : (
+                  <span className=" font-serif text-gray-400">
+                    Paraphrased text results will appear here
+                  </span>
+                )}
+              </p>
             )}
           </div>
           <div className="flex justify-between items-center">
             <span className="flex items-center w-fit px-2  rounded-[26px] max-h-[24px] border border-gray-300">
               <p className=" text-[14px]">
-                Word Count: <span>{paraphrasedCount}</span>{" "}
+                Word Count:{" "}
+                <span>
+                  {article.summary
+                    ? paraphrasedTextRef?.current?.innerText?.split(/\s+/)
+                        .length
+                    : 0}
+                </span>{" "}
               </p>
             </span>
             <button
