@@ -75,8 +75,10 @@ const Paraphraser = () => {
   const handleRephrase = () => {
     setIsLoading(true);
     setSuggestionIndex((prevIndex) => (prevIndex + 1) % suggestions.length);
-    const nextSuggestion = suggestions[suggestionIndex];
+  };
 
+  useEffect(() => {
+    const nextSuggestion = suggestions[suggestionIndex];
     if (nextSuggestion) {
       setArticle({ ...article, summary: nextSuggestion.text });
       setTimeout(() => {
@@ -92,7 +94,9 @@ const Paraphraser = () => {
       );
       setChangesMade(false);
     }
-  };
+
+    return () => {};
+  }, [suggestionIndex]);
 
   const handleCopyArticle = (event) => {
     const button = event.currentTarget;
