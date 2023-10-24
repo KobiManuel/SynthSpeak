@@ -145,21 +145,27 @@ const Paraphraser = () => {
       >
         <h2>History</h2>
         <ul className="flex flex-col gap-2">
-          {allArticles.map((article, index) => (
-            <li
-              className="link_card"
-              key={index}
-              onClick={() => {
-                setArticle(article);
-                setIsDrawerOpen(false);
-                setChangesMade(true);
-              }}
-            >
-              <p className="flex-1 font-poppins text-blue-700 font-medium text-sm truncate">
-                {article.text}
-              </p>
+          {allArticles.length === 0 ? (
+            <li className="flex-1 text-blue-700 text-sm">
+              Nothing to see here yet
             </li>
-          ))}
+          ) : (
+            allArticles.map((article, index) => (
+              <li
+                className="link_card"
+                key={index}
+                onClick={() => {
+                  setArticle(article);
+                  setIsDrawerOpen(false);
+                  setChangesMade(true);
+                }}
+              >
+                <p className="flex-1 font-poppins text-blue-700 font-medium text-sm truncate">
+                  {article.text}
+                </p>
+              </li>
+            ))
+          )}
         </ul>
       </div>
       <div class="group relative">
