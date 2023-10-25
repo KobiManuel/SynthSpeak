@@ -5,7 +5,6 @@ import Loader from "./Loader";
 const Paraphraser = () => {
   const [count, setCount] = useState(0);
   const [copied, setCopied] = useState(false);
-  const [paraphrasedCount, setparaphrasedCount] = useState(0);
   const [article, setArticle] = useState({
     text: "",
     summary: "",
@@ -126,6 +125,28 @@ const Paraphraser = () => {
     setActiveMode(index);
   };
 
+  const handleInput = (e) => {
+    const inputText = e.target.value;
+    const wordCount = inputText.trim().split(/\s+/).length || 0;
+    const charCount = inputText.length;
+
+    if (charCount <= 498) {
+      setArticle({
+        ...article,
+        text: inputText,
+      });
+      setCount(wordCount);
+    } else {
+      setArticle({
+        ...article,
+        text: "⚠ Cannot render text, max character limit (500) exceeded",
+      });
+    }
+    if (wordCount === 1) {
+      setCount(0);
+    }
+  };
+
   return (
     <div className="px-6 pb-6 relative overflow-x-hidden">
       <div
@@ -185,7 +206,7 @@ const Paraphraser = () => {
         {buttons.map((label, index) => (
           <button
             key={index}
-            className={`border border-gray-300 p-1 min-w-[100px] max-w-[100px] rounded-[100px] max-[420px]:max-w-[70px]  max-[420px]:min-w-[70px]  hover:bg-black hover:text-white  max-[772px]:self-center max-[772px]:justify-self-center ${
+            className={`border border-gray-400 p-1 min-w-[100px] max-w-[100px] rounded-[100px] max-[420px]:max-w-[70px]  max-[420px]:min-w-[70px]  hover:bg-black hover:text-white  max-[772px]:self-center max-[772px]:justify-self-center ${
               index === activeMode ? "bg-black text-white" : "bg-transparent"
             }`}
             onClick={() => handleModeClick(index)}
@@ -210,20 +231,10 @@ const Paraphraser = () => {
           </span>
           <textarea
             value={article.text}
-            onChange={(e) => {
-              const wordCount = e.target.value.trim().split(/\s+/).length || 0;
-              setArticle({
-                ...article,
-                text: e.target.value,
-              });
-              setCount(wordCount);
-              if (wordCount === 1) {
-                setCount(0);
-              }
-            }}
+            onChange={handleInput}
             required
-            placeholder="Enter or paste text here to paraphrase"
-            className="w-full h-72 font-serif outline-none border-none"
+            placeholder="Enter or paste text here to paraphrase (500 character limit)"
+            className={`w-full h-72 font-serif outline-none border-none`}
           />
           <div className="flex items-center justify-between max-[349px]:flex-col max-[349px]:gap-4">
             <span className="flex w-fit px-2 max-h-[24px] rounded-[26px] border border-gray-300">
@@ -250,16 +261,14 @@ const Paraphraser = () => {
           </div>
         </div>
         <div className="border border-gray-300 w-[50%] pt-6 px-2 bg-white max-[780px]:w-[100%]">
-          <div className=" relative h-[18.2rem] max-w-full">
+          <div className=" relative h-[18.2rem] max-w-full overflow-y-auto">
             {isFetching || isLoading ? (
               <div className="loader-svg">
                 <Loader size={70} />
               </div>
             ) : error ? (
               <textarea
-                value={
-                  "I'm sorry, this Feature is undergoing some maintenance and won't be available for now"
-                }
+                value={"Sorry an error occurred. please try again"}
                 readOnly
                 placeholder="Enter or paste text here to paraphrase"
                 className="paraphrased_text w-full h-72 font-serif outline-none border-none text-gray-600"
