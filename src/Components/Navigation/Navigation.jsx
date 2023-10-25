@@ -61,7 +61,7 @@ const Navigation = () => {
         className={`disc l5 toggle ${isOpen ? "open" : ""}`}
         onClick={toggleNavigation}
       >
-        {isOpen ? "Close" : "Menu"}
+        {isOpen ? "Close" : isPhoneScreen ? "Contact" : "Menu"}
       </a>
     </nav>
   );
