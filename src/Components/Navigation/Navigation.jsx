@@ -4,13 +4,18 @@ import "./Navigation.scss";
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const phoneScreenWidth = 700;
+  const isPhoneScreen = window.innerWidth < phoneScreenWidth;
+
   const toggleNavigation = () => {
     setIsOpen(!isOpen);
   };
 
   useEffect(() => {
     setTimeout(() => {
-      toggleNavigation();
+      if (!isPhoneScreen) {
+        toggleNavigation();
+      }
     }, 800);
   }, []);
   const email = "emmakobi91@gmail.com";
